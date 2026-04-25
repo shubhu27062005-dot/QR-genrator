@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>QR Master Pro</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#667eea,#764ba2);
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+}
+
+/* DARK */
+.dark{background:#0f172a !important}
+.dark .box,.dark .qr-box{background:#1e293b !important}
+.dark input,.dark select{background:#334155;color:white}
+
+/* PAGE */
+.page{
+display:none;
+width:100%;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+}
+
+/* LOGIN */
+.box{
+background:rgba(255,255,255,0.15);
+padding:40px;border-radius:20px;width:360px;text-align:center;
+}
+
+/* INPUT */
+input,select{
+width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;
+}
+
+/* BUTTON */
+button{
+width:100%;padding:12px;border:none;border-radius:8px;
+background:white;color:#4f46e5;font-weight:bold;cursor:pointer;margin-top:10px;
+}
+
+/* DASHBOARD */
+.card-container{display:flex;gap:20px}
+.card{
+width:180px;height:110px;background:white;color:black;
+border-radius:12px;display:flex;justify-content:center;align-items:center;
+cursor:pointer;font-weight:bold;
+}
+
+/* QR BOX */
+.qr-box{
+background:rgba(255,255,255,0.15);
+padding:25px;border-radius:15px;width:320px;
+display:flex;flex-direction:column;align-items:center;
+}
+
+/* 🔥 FIXED QR GAP */
+#qr{
+margin:20px 0;
+display:flex;
+justify-content:center;
+}
+
+#qr img{width:200px}
+
+/* BACK + THEME */
+.back-btn,.theme-btn{
+position:fixed;left:15px;
+background:black;color:white;
+padding:8px 12px;border-radius:20px;
+cursor:pointer;font-size:12px;
+}
+.back-btn{top:15px}
+.theme-btn{top:55px}
+
+/* TEMPLATE GRID */
+.template-bar{
+margin-top:15px;
+display:none;
+flex-wrap:wrap;
+gap:10px;
+justify-content:center;
+max-height:200px;
+overflow-y:auto;
+}
+
+.template-bar img{
+width:65px;
+height:65px;
+object-fit:cover;
+border-radius:10px;
+cursor:pointer;
+border:2px solid white;
+transition:0.2s;
+}
+
+.template-bar img:hover{
+transform:scale(1.1);
+border-color:yellow;
+}
+
+/* HISTORY */
+.item{
+background:white;color:black;margin:10px;padding:10px;border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="page">
+<div class="box">
+<h2 id="title">Login</h2>
+
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="auth()">Login</button>
+<p onclick="toggleMode()" style="cursor:pointer;margin-top:10px">Create Account</p>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="page">
+<h2>Dashboard</h2>
+
+<div class="card-container">
+<div class="card" onclick="showPage('generator')">Generate QR</div>
+<div class="card" onclick="showPage('history')">History</div>
+</div>
+</div>
+
+<!-- GENERATOR -->
+<div id="generator" class="page">
+
+<div class="back-btn" onclick="showPage('dashboard')">← Back</div>
+<div class="theme-btn" onclick="toggleTheme()">🌙 Theme</div>
+
+<div class="qr-box">
+
+<h3>Create QR</h3>
+
+<select id="type">
+<option value="text">Text</option>
+<option value="link">Website</option>
+<option value="whatsapp">WhatsApp</option>
+<option value="call">Call</option>
+</select>
+
+<input id="text" placeholder="Enter data">
+
+<button onclick="gen()">Generate QR</button>
+
+<div id="qr"></div>
+
+<button onclick="toggleTemplates()">Templates 🎨</button>
+
+<div id="templates" class="template-bar">
+
+<img src="t1.png" onclick="applyTemplate('t1')">
+<img src="t2.png" onclick="applyTemplate('t2')">
+<img src="t3.png" onclick="applyTemplate('t3')">
+<img src="t4.png" onclick="applyTemplate('t4')">
+<img src="t5.png" onclick="applyTemplate('t5')">
+<img src="t6.png" onclick="applyTemplate('t6')">
+<img src="t7.png" onclick="applyTemplate('t7')">
+<img src="t8.png" onclick="applyTemplate('t8')">
+<img src="t9.png" onclick="applyTemplate('t9')">
+<img src="t10.png" onclick="applyTemplate('t10')">
+<img src="t11.png" onclick="applyTemplate('t11')">
+<img src="t12.png" onclick="applyTemplate('t12')">
+<img src="t13.png" onclick="applyTemplate('t13')">
+<img src="t14.png" onclick="applyTemplate('t14')">
+
+</div>
+
+<button onclick="downloadQR()">Download QR</button>
+
+</div>
+</div>
+
+<!-- HISTORY -->
+<div id="history" class="page">
+<div class="back-btn" onclick="showPage('dashboard')">← Back</div>
+<h3>History</h3>
+<div id="list"></div>
+</div>
+
+<script>
+
+let isLogin=true
+let lastData=""
+
+/* NAV */
+function showPage(id){
+document.querySelectorAll(".page").forEach(p=>p.style.display="none")
+document.getElementById(id).style.display="flex"
+if(id==="history") loadHistory()
+}
+window.onload=()=>showPage("login")
+
+/* THEME */
+function toggleTheme(){
+document.body.classList.toggle("dark")
+}
+
+/* LOGIN */
+function toggleMode(){
+isLogin=!isLogin
+document.getElementById("title").innerText=isLogin?"Login":"Register"
+}
+
+function auth(){
+let email=document.getElementById("email").value
+let pass=document.getElementById("pass").value
+
+if(!email.includes("@")) return alert("Valid email")
+if(pass.length<4) return alert("Min 4 chars")
+
+let users=JSON.parse(localStorage.getItem("users")||"{}")
+
+if(isLogin){
+if(users[email]===pass) showPage("dashboard")
+else alert("Wrong login")
+}else{
+users[email]=pass
+localStorage.setItem("users",JSON.stringify(users))
+alert("Registered")
+toggleMode()
+}
+}
+
+/* QR */
+function gen(){
+let text=document.getElementById("text").value
+let type=document.getElementById("type").value
+
+if(!text) return alert("Enter data")
+
+if(type==="link" && !text.startsWith("http")){
+text="https://"+text
+}
+if(type==="whatsapp"){
+text="https://wa.me/91"+text
+}
+if(type==="call"){
+text="tel:"+text
+}
+
+lastData=text
+
+let url=`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+encodeURIComponent(lastData)
+
+document.getElementById("qr").innerHTML=`<img src="${url}">`
+}
+
+/* TEMPLATE */
+function toggleTemplates(){
+let t=document.getElementById("templates")
+t.style.display = t.style.display==="flex"?"none":"flex"
+}
+
+function applyTemplate(t){
+
+let url=`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+encodeURIComponent(lastData)
+
+let style=""
+
+if(t==="t1") style="background:#d1fae5;border-radius:20px;padding:10px"
+if(t==="t2") style="background:#111;color:white;padding:10px"
+if(t==="t3") style="background:#fca5a5;border-radius:15px;padding:10px"
+if(t==="t4") style="background:#fde68a;border-radius:25px;padding:10px"
+if(t==="t5") style="background:#67e8f9;border-radius:50%;padding:15px"
+if(t==="t6") style="background:#000;color:white;padding:10px"
+
+if(t.startsWith("t")){
+
+document.getElementById("qr").innerHTML=`
+<div style="text-align:center;${style}">
+<img src="${url}">
+<div style="margin-top:5px;font-weight:bold">SCAN ME</div>
+</div>`
+}
+}
+
+/* DOWNLOAD FIX */
+function downloadQR(){
+if(!lastData) return alert("Generate first")
+
+let img=new Image()
+img.crossOrigin="anonymous"
+img.src=`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+encodeURIComponent(lastData)
+
+img.onload=function(){
+let canvas=document.createElement("canvas")
+canvas.width=300
+canvas.height=300
+let ctx=canvas.getContext("2d")
+ctx.drawImage(img,0,0)
+
+let a=document.createElement("a")
+a.download="qr.png"
+a.href=canvas.toDataURL()
+a.click()
+}
+}
+
+/* HISTORY */
+function loadHistory(){
+let h=JSON.parse(localStorage.getItem("history")||"[]")
+list.innerHTML=h.map(i=>`<div class="item">${i}</div>`).join("")
+}
+
+</script>
+
+</body>
+</html>
