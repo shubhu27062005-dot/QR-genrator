@@ -246,7 +246,6 @@ top:50%;
 transform:translateY(-50%);
 cursor:pointer;
 color:black;
-font-size:14px;
 }
 
 </style>
@@ -266,24 +265,15 @@ font-size:14px;
 
 <div style="position:relative;width:100%">
 
-<input 
-id="pass" 
-type="password" 
-placeholder="Password"
-style="padding-right:45px"
->
+<input id="pass" type="password" placeholder="Password" style="padding-right:45px">
 
 <span class="eye" onclick="togglePassword()">👁</span>
 
 </div>
 
-<button id="authBtn" onclick="auth()">Login</button>
+<button onclick="auth()">Login</button>
 
-<p 
-id="switchText"
-onclick="toggleMode()" 
-style="margin-top:15px;cursor:pointer"
->
+<p onclick="toggleMode()" style="margin-top:15px;cursor:pointer">
 Create Account
 </p>
 
@@ -385,13 +375,14 @@ Download QR
 
 let isLogin=true
 let lastData=""
+let currentTemplate=""
 
-/* PAGE NAVIGATION */
+/* PAGE */
 
 function showPage(id){
 
-document.querySelectorAll(".page").forEach(page=>{
-page.style.display="none"
+document.querySelectorAll(".page").forEach(p=>{
+p.style.display="none"
 })
 
 document.getElementById(id).style.display="flex"
@@ -412,7 +403,7 @@ function toggleTheme(){
 document.body.classList.toggle("dark")
 }
 
-/* PASSWORD SHOW HIDE */
+/* PASSWORD */
 
 function togglePassword(){
 
@@ -426,33 +417,21 @@ pass.type="password"
 
 }
 
-/* LOGIN REGISTER SWITCH */
+/* LOGIN MODE */
 
 function toggleMode(){
 
-isLogin = !isLogin
+isLogin=!isLogin
 
-let title = document.getElementById("title")
-let btn = document.getElementById("authBtn")
-let switchText = document.getElementById("switchText")
+document.getElementById("title").innerText=
+isLogin?"Login":"Register"
 
-if(isLogin){
-
-title.innerText = "Login"
-btn.innerText = "Login"
-switchText.innerText = "Create Account"
-
-}else{
-
-title.innerText = "Register"
-btn.innerText = "Register"
-switchText.innerText = "Already Have Account ?"
+document.querySelector("button").innerText=
+isLogin?"Login":"Register"
 
 }
 
-}
-
-/* AUTH SYSTEM */
+/* AUTH */
 
 function auth(){
 
@@ -460,19 +439,19 @@ let email=document.getElementById("email").value.trim()
 let pass=document.getElementById("pass").value.trim()
 
 if(email===""){
-return alert("Enter Email")
+return alert("Enter email")
 }
 
 if(pass===""){
-return alert("Enter Password")
+return alert("Enter password")
 }
 
 if(!email.includes("@") || !email.includes(".")){
-return alert("Enter Valid Email")
+return alert("Enter valid email")
 }
 
 if(pass.length<4){
-return alert("Password Minimum 4 Characters")
+return alert("Password minimum 4 characters")
 }
 
 let users=JSON.parse(localStorage.getItem("users") || "{}")
@@ -484,12 +463,11 @@ if(isLogin){
 if(users[email] && users[email]===pass){
 
 alert("Login Successful")
-
 showPage("dashboard")
 
 }else{
 
-alert("Wrong Email Or Password")
+alert("Wrong Email or Password")
 
 }
 
@@ -500,7 +478,7 @@ alert("Wrong Email Or Password")
 else{
 
 if(users[email]){
-return alert("Account Already Exists")
+return alert("Account already exists")
 }
 
 users[email]=pass
@@ -515,16 +493,12 @@ toggleMode()
 
 }
 
-/* ENTER KEY SUPPORT */
+/* ENTER KEY */
 
 document.addEventListener("keypress",function(e){
 
 if(e.key==="Enter"){
-
-if(document.getElementById("login").style.display==="flex"){
 auth()
-}
-
 }
 
 })
@@ -589,9 +563,7 @@ t.style.display==="flex"?"none":"flex"
 
 function applyTemplate(t){
 
-if(!lastData){
-return alert("Generate QR First")
-}
+currentTemplate=t
 
 let url=
 `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+
