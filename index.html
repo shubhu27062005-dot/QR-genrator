@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Master Pro</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
 
 body{
 min-height:100vh;
@@ -14,76 +21,168 @@ display:flex;
 justify-content:center;
 align-items:center;
 color:white;
+overflow-x:hidden;
+transition:0.3s;
 }
 
-/* DARK */
-.dark{background:#0f172a !important}
-.dark .box,.dark .qr-box{background:#1e293b !important}
-.dark input,.dark select{background:#334155;color:white}
+/* DARK MODE */
+
+.dark{
+background:#0f172a !important;
+}
+
+.dark .box,
+.dark .qr-box,
+.dark .card{
+background:#1e293b !important;
+color:white;
+}
+
+.dark input,
+.dark select{
+background:#334155;
+color:white;
+}
+
+.dark .item{
+background:#334155;
+color:white;
+}
 
 /* PAGE */
+
 .page{
 display:none;
 width:100%;
 min-height:100vh;
-display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+padding:20px;
 }
 
 /* LOGIN */
+
 .box{
 background:rgba(255,255,255,0.15);
-padding:40px;border-radius:20px;width:360px;text-align:center;
+padding:40px;
+border-radius:20px;
+width:360px;
+backdrop-filter:blur(10px);
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
 /* INPUT */
+
 input,select{
-width:100%;padding:12px;margin:10px 0;border:none;border-radius:8px;
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:10px;
+outline:none;
+font-size:15px;
 }
 
 /* BUTTON */
+
 button{
-width:100%;padding:12px;border:none;border-radius:8px;
-background:white;color:#4f46e5;font-weight:bold;cursor:pointer;margin-top:10px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:white;
+color:#4f46e5;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
+transition:0.2s;
+}
+
+button:hover{
+transform:scale(1.03);
 }
 
 /* DASHBOARD */
-.card-container{display:flex;gap:20px}
+
+.card-container{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+justify-content:center;
+margin-top:25px;
+}
+
 .card{
-width:180px;height:110px;background:white;color:black;
-border-radius:12px;display:flex;justify-content:center;align-items:center;
-cursor:pointer;font-weight:bold;
+width:190px;
+height:120px;
+background:white;
+color:black;
+border-radius:15px;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+font-weight:bold;
+font-size:18px;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
 }
 
 /* QR BOX */
+
 .qr-box{
 background:rgba(255,255,255,0.15);
-padding:25px;border-radius:15px;width:320px;
-display:flex;flex-direction:column;align-items:center;
+padding:25px;
+border-radius:20px;
+width:340px;
+display:flex;
+flex-direction:column;
+align-items:center;
+backdrop-filter:blur(10px);
 }
 
-/* 🔥 FIXED QR GAP */
+/* QR */
+
 #qr{
 margin:20px 0;
 display:flex;
 justify-content:center;
 }
 
-#qr img{width:200px}
-
-/* BACK + THEME */
-.back-btn,.theme-btn{
-position:fixed;left:15px;
-background:black;color:white;
-padding:8px 12px;border-radius:20px;
-cursor:pointer;font-size:12px;
+#qr img{
+width:200px;
+border-radius:10px;
 }
-.back-btn{top:15px}
-.theme-btn{top:55px}
 
-/* TEMPLATE GRID */
+/* TOP BUTTONS */
+
+.back-btn,.theme-btn{
+position:fixed;
+left:15px;
+background:black;
+color:white;
+padding:8px 15px;
+border-radius:20px;
+cursor:pointer;
+font-size:13px;
+z-index:100;
+}
+
+.back-btn{
+top:15px;
+}
+
+.theme-btn{
+top:60px;
+}
+
+/* TEMPLATE */
+
 .template-bar{
 margin-top:15px;
 display:none;
@@ -110,52 +209,121 @@ border-color:yellow;
 }
 
 /* HISTORY */
-.item{
-background:white;color:black;margin:10px;padding:10px;border-radius:8px;
+
+#list{
+margin-top:20px;
+width:350px;
 }
+
+.item{
+background:white;
+color:black;
+padding:12px;
+margin:10px 0;
+border-radius:10px;
+word-break:break-word;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.delete-btn{
+background:red;
+color:white;
+border:none;
+padding:5px 10px;
+border-radius:6px;
+cursor:pointer;
+width:auto;
+}
+
+/* PASSWORD ICON */
+
+.eye{
+position:absolute;
+right:15px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+color:black;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN PAGE -->
+
 <div id="login" class="page">
+
 <div class="box">
+
 <h2 id="title">Login</h2>
 
-<input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Password">
+<input id="email" type="email" placeholder="Email">
+
+<div style="position:relative;width:100%">
+
+<input id="pass" type="password" placeholder="Password" style="padding-right:45px">
+
+<span class="eye" onclick="togglePassword()">👁</span>
+
+</div>
 
 <button onclick="auth()">Login</button>
-<p onclick="toggleMode()" style="cursor:pointer;margin-top:10px">Create Account</p>
+
+<p onclick="toggleMode()" style="margin-top:15px;cursor:pointer">
+Create Account
+</p>
+
 </div>
+
 </div>
 
 <!-- DASHBOARD -->
+
 <div id="dashboard" class="page">
-<h2>Dashboard</h2>
+
+<h1>QR Master Pro</h1>
 
 <div class="card-container">
-<div class="card" onclick="showPage('generator')">Generate QR</div>
-<div class="card" onclick="showPage('history')">History</div>
+
+<div class="card" onclick="showPage('generator')">
+Generate QR
 </div>
+
+<div class="card" onclick="showPage('history')">
+History
+</div>
+
+</div>
+
 </div>
 
 <!-- GENERATOR -->
+
 <div id="generator" class="page">
 
-<div class="back-btn" onclick="showPage('dashboard')">← Back</div>
-<div class="theme-btn" onclick="toggleTheme()">🌙 Theme</div>
+<div class="back-btn" onclick="showPage('dashboard')">
+← Back
+</div>
+
+<div class="theme-btn" onclick="toggleTheme()">
+🌙 Theme
+</div>
 
 <div class="qr-box">
 
-<h3>Create QR</h3>
+<h2>Create QR</h2>
 
 <select id="type">
+
 <option value="text">Text</option>
 <option value="link">Website</option>
 <option value="whatsapp">WhatsApp</option>
 <option value="call">Call</option>
+
 </select>
 
 <input id="text" placeholder="Enter data">
@@ -164,7 +332,9 @@ background:white;color:black;margin:10px;padding:10px;border-radius:8px;
 
 <div id="qr"></div>
 
-<button onclick="toggleTemplates()">Templates 🎨</button>
+<button onclick="toggleTemplates()">
+Templates 🎨
+</button>
 
 <div id="templates" class="template-bar">
 
@@ -174,152 +344,344 @@ background:white;color:black;margin:10px;padding:10px;border-radius:8px;
 <img src="t4.png" onclick="applyTemplate('t4')">
 <img src="t5.png" onclick="applyTemplate('t5')">
 <img src="t6.png" onclick="applyTemplate('t6')">
-<img src="t7.png" onclick="applyTemplate('t7')">
-<img src="t8.png" onclick="applyTemplate('t8')">
-<img src="t9.png" onclick="applyTemplate('t9')">
-<img src="t10.png" onclick="applyTemplate('t10')">
-<img src="t11.png" onclick="applyTemplate('t11')">
-<img src="t12.png" onclick="applyTemplate('t12')">
-<img src="t13.png" onclick="applyTemplate('t13')">
-<img src="t14.png" onclick="applyTemplate('t14')">
 
 </div>
 
-<button onclick="downloadQR()">Download QR</button>
+<button onclick="downloadQR()">
+Download QR
+</button>
 
 </div>
+
 </div>
 
 <!-- HISTORY -->
+
 <div id="history" class="page">
-<div class="back-btn" onclick="showPage('dashboard')">← Back</div>
-<h3>History</h3>
+
+<div class="back-btn" onclick="showPage('dashboard')">
+← Back
+</div>
+
+<h2>QR History</h2>
+
 <div id="list"></div>
+
 </div>
 
 <script>
 
+/* VARIABLES */
+
 let isLogin=true
 let lastData=""
+let currentTemplate=""
 
-/* NAV */
+/* PAGE */
+
 function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.style.display="none")
+
+document.querySelectorAll(".page").forEach(p=>{
+p.style.display="none"
+})
+
 document.getElementById(id).style.display="flex"
-if(id==="history") loadHistory()
+
+if(id==="history"){
+loadHistory()
 }
-window.onload=()=>showPage("login")
+
+}
+
+window.onload=()=>{
+showPage("login")
+}
 
 /* THEME */
+
 function toggleTheme(){
 document.body.classList.toggle("dark")
 }
 
-/* LOGIN */
-function toggleMode(){
-isLogin=!isLogin
-document.getElementById("title").innerText=isLogin?"Login":"Register"
+/* PASSWORD */
+
+function togglePassword(){
+
+let pass=document.getElementById("pass")
+
+if(pass.type==="password"){
+pass.type="text"
+}else{
+pass.type="password"
 }
+
+}
+
+/* LOGIN MODE */
+
+function toggleMode(){
+
+isLogin=!isLogin
+
+document.getElementById("title").innerText=
+isLogin?"Login":"Register"
+
+document.querySelector("button").innerText=
+isLogin?"Login":"Register"
+
+}
+
+/* AUTH */
 
 function auth(){
-let email=document.getElementById("email").value
-let pass=document.getElementById("pass").value
 
-if(!email.includes("@")) return alert("Valid email")
-if(pass.length<4) return alert("Min 4 chars")
+let email=document.getElementById("email").value.trim()
+let pass=document.getElementById("pass").value.trim()
 
-let users=JSON.parse(localStorage.getItem("users")||"{}")
+if(email===""){
+return alert("Enter email")
+}
+
+if(pass===""){
+return alert("Enter password")
+}
+
+if(!email.includes("@") || !email.includes(".")){
+return alert("Enter valid email")
+}
+
+if(pass.length<4){
+return alert("Password minimum 4 characters")
+}
+
+let users=JSON.parse(localStorage.getItem("users") || "{}")
+
+/* LOGIN */
 
 if(isLogin){
-if(users[email]===pass) showPage("dashboard")
-else alert("Wrong login")
+
+if(users[email] && users[email]===pass){
+
+alert("Login Successful")
+showPage("dashboard")
+
 }else{
-users[email]=pass
-localStorage.setItem("users",JSON.stringify(users))
-alert("Registered")
-toggleMode()
-}
+
+alert("Wrong Email or Password")
+
 }
 
-/* QR */
+}
+
+/* REGISTER */
+
+else{
+
+if(users[email]){
+return alert("Account already exists")
+}
+
+users[email]=pass
+
+localStorage.setItem("users",JSON.stringify(users))
+
+alert("Registration Successful")
+
+toggleMode()
+
+}
+
+}
+
+/* ENTER KEY */
+
+document.addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+auth()
+}
+
+})
+
+/* QR GENERATE */
+
 function gen(){
-let text=document.getElementById("text").value
+
+let text=document.getElementById("text").value.trim()
 let type=document.getElementById("type").value
 
-if(!text) return alert("Enter data")
+if(text===""){
+return alert("Enter data")
+}
 
 if(type==="link" && !text.startsWith("http")){
 text="https://"+text
 }
+
 if(type==="whatsapp"){
 text="https://wa.me/91"+text
 }
+
 if(type==="call"){
 text="tel:"+text
 }
 
 lastData=text
 
-let url=`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+encodeURIComponent(lastData)
+/* SAVE HISTORY */
 
-document.getElementById("qr").innerHTML=`<img src="${url}">`
+let history=
+JSON.parse(localStorage.getItem("history") || "[]")
+
+history.unshift(text)
+
+if(history.length>20){
+history.pop()
+}
+
+localStorage.setItem("history",JSON.stringify(history))
+
+let url=
+`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+
+encodeURIComponent(lastData)
+
+document.getElementById("qr").innerHTML=
+`<img src="${url}">`
+
 }
 
 /* TEMPLATE */
+
 function toggleTemplates(){
+
 let t=document.getElementById("templates")
-t.style.display = t.style.display==="flex"?"none":"flex"
+
+t.style.display=
+t.style.display==="flex"?"none":"flex"
+
 }
 
 function applyTemplate(t){
 
-let url=`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+encodeURIComponent(lastData)
+currentTemplate=t
+
+let url=
+`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+
+encodeURIComponent(lastData)
 
 let style=""
 
-if(t==="t1") style="background:#d1fae5;border-radius:20px;padding:10px"
-if(t==="t2") style="background:#111;color:white;padding:10px"
-if(t==="t3") style="background:#fca5a5;border-radius:15px;padding:10px"
-if(t==="t4") style="background:#fde68a;border-radius:25px;padding:10px"
-if(t==="t5") style="background:#67e8f9;border-radius:50%;padding:15px"
-if(t==="t6") style="background:#000;color:white;padding:10px"
+if(t==="t1")
+style="background:#d1fae5;padding:10px;border-radius:20px"
 
-if(t.startsWith("t")){
+if(t==="t2")
+style="background:#111;padding:10px;border-radius:20px;color:white"
+
+if(t==="t3")
+style="background:#fca5a5;padding:10px;border-radius:20px"
+
+if(t==="t4")
+style="background:#fde68a;padding:10px;border-radius:20px"
+
+if(t==="t5")
+style="background:#67e8f9;padding:15px;border-radius:50%"
+
+if(t==="t6")
+style="background:#000;padding:10px;border-radius:20px;color:white"
 
 document.getElementById("qr").innerHTML=`
+
 <div style="text-align:center;${style}">
+
 <img src="${url}">
-<div style="margin-top:5px;font-weight:bold">SCAN ME</div>
-</div>`
-}
+
+<div style="margin-top:8px;font-weight:bold">
+SCAN ME
+</div>
+
+</div>
+
+`
+
 }
 
-/* DOWNLOAD FIX */
+/* DOWNLOAD */
+
 function downloadQR(){
-if(!lastData) return alert("Generate first")
+
+if(!lastData){
+return alert("Generate QR first")
+}
 
 let img=new Image()
+
 img.crossOrigin="anonymous"
-img.src=`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+encodeURIComponent(lastData)
+
+img.src=
+`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+
+encodeURIComponent(lastData)
 
 img.onload=function(){
+
 let canvas=document.createElement("canvas")
+
 canvas.width=300
 canvas.height=300
+
 let ctx=canvas.getContext("2d")
+
 ctx.drawImage(img,0,0)
 
 let a=document.createElement("a")
+
 a.download="qr.png"
+
 a.href=canvas.toDataURL()
+
 a.click()
+
 }
+
 }
 
 /* HISTORY */
+
 function loadHistory(){
-let h=JSON.parse(localStorage.getItem("history")||"[]")
-list.innerHTML=h.map(i=>`<div class="item">${i}</div>`).join("")
+
+let history=
+JSON.parse(localStorage.getItem("history") || "[]")
+
+document.getElementById("list").innerHTML=
+history.map((item,index)=>`
+
+<div class="item">
+
+<span>${item}</span>
+
+<button class="delete-btn"
+onclick="deleteHistory(${index})">
+Delete
+</button>
+
+</div>
+
+`).join("")
+
+}
+
+/* DELETE HISTORY */
+
+function deleteHistory(index){
+
+let history=
+JSON.parse(localStorage.getItem("history") || "[]")
+
+history.splice(index,1)
+
+localStorage.setItem("history",JSON.stringify(history))
+
+loadHistory()
+
 }
 
 </script>
