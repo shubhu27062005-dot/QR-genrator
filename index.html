@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QR Master Pro</title>
+
+<title>QR GENERATOR X</title>
 
 <style>
 
@@ -15,237 +16,443 @@ font-family:Poppins,sans-serif;
 }
 
 body{
+
 min-height:100vh;
-background:linear-gradient(135deg,#667eea,#764ba2);
+
+background:
+linear-gradient(
+135deg,
+#050816,
+#0f172a,
+#111827,
+#1e1b4b
+);
+
+background-size:400% 400%;
+animation:bgMove 10s ease infinite;
+
 display:flex;
 justify-content:center;
 align-items:center;
+
 color:white;
 overflow-x:hidden;
-transition:0.3s;
+
 }
 
-/* DARK MODE */
+/* BACKGROUND */
 
-.dark{
-background:#0f172a !important;
+@keyframes bgMove{
+
+0%{
+background-position:0% 50%;
 }
 
-.dark .box,
-.dark .qr-box,
-.dark .card{
-background:#1e293b !important;
-color:white;
+50%{
+background-position:100% 50%;
 }
 
-.dark input,
-.dark select{
-background:#334155;
-color:white;
+100%{
+background-position:0% 50%;
 }
 
-.dark .item{
-background:#334155;
-color:white;
 }
 
 /* PAGE */
 
 .page{
+
 display:none;
 width:100%;
 min-height:100vh;
+
 flex-direction:column;
 justify-content:center;
 align-items:center;
+
 padding:20px;
+
+animation:fade 0.4s ease;
+
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(15px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* LOGO */
+
+.logo{
+
+font-size:48px;
+font-weight:900;
+
+letter-spacing:4px;
+text-transform:uppercase;
+
+display:flex;
+align-items:center;
+gap:12px;
+
+margin-bottom:25px;
+
+color:#00f7ff;
+
+text-shadow:
+0 0 5px #00f7ff,
+0 0 10px #00f7ff,
+0 0 20px #00f7ff,
+0 0 40px #00f7ff;
+
+animation:neonGlow 2s infinite alternate;
+
+}
+
+.logo span{
+
+font-size:55px;
+
+filter:drop-shadow(
+0 0 12px #00f7ff
+);
+
+animation:flash 1.5s infinite;
+
+}
+
+@keyframes neonGlow{
+
+from{
+transform:scale(1);
+}
+
+to{
+transform:scale(1.03);
+}
+
+}
+
+@keyframes flash{
+
+0%{
+transform:rotate(0deg);
+}
+
+50%{
+transform:rotate(10deg) scale(1.1);
+}
+
+100%{
+transform:rotate(0deg);
+}
+
+}
+
+/* BOX */
+
+.box,
+.qr-box,
+.card{
+
+background:
+rgba(15,23,42,0.7);
+
+border:
+1px solid rgba(0,247,255,0.2);
+
+backdrop-filter:blur(14px);
+
+box-shadow:
+0 0 20px rgba(0,247,255,0.15);
+
+border-radius:20px;
+
 }
 
 /* LOGIN */
 
 .box{
-background:rgba(255,255,255,0.15);
+
 padding:40px;
-border-radius:20px;
 width:360px;
-backdrop-filter:blur(10px);
 text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
+
 }
 
 /* INPUT */
 
-input,select{
+input,
+select{
+
 width:100%;
-padding:12px;
+padding:14px;
 margin:10px 0;
-border:none;
-border-radius:10px;
+
+border-radius:14px;
+
+border:
+1px solid rgba(0,247,255,0.2);
+
+background:
+rgba(255,255,255,0.06);
+
+color:white;
+
 outline:none;
+
 font-size:15px;
+
+}
+
+input::placeholder{
+color:#cbd5e1;
+}
+
+select option{
+background:#0f172a;
 }
 
 /* BUTTON */
 
 button{
+
 width:100%;
-padding:12px;
+padding:13px;
+
 border:none;
-border-radius:10px;
-background:white;
-color:#4f46e5;
-font-weight:bold;
+border-radius:14px;
+
+background:
+linear-gradient(
+90deg,
+#00f7ff,
+#7c3aed
+);
+
+color:white;
+
+font-weight:700;
+font-size:15px;
+
 cursor:pointer;
 margin-top:10px;
-transition:0.2s;
+
+transition:0.3s;
+
+box-shadow:
+0 0 15px rgba(0,247,255,0.4);
+
 }
 
 button:hover{
-transform:scale(1.03);
+
+transform:
+translateY(-3px)
+scale(1.03);
+
+box-shadow:
+0 0 25px rgba(0,247,255,0.7);
+
 }
 
 /* DASHBOARD */
 
 .card-container{
+
 display:flex;
 gap:20px;
 flex-wrap:wrap;
 justify-content:center;
+
 margin-top:25px;
+
 }
 
 .card{
+
 width:190px;
 height:120px;
-background:white;
-color:black;
-border-radius:15px;
+
 display:flex;
 justify-content:center;
 align-items:center;
+
 cursor:pointer;
+
 font-weight:bold;
 font-size:18px;
+
 transition:0.3s;
+
+color:white;
+
 }
 
 .card:hover{
-transform:translateY(-5px);
+
+transform:
+translateY(-8px)
+scale(1.03);
+
+box-shadow:
+0 10px 30px rgba(0,0,0,0.35);
+
 }
 
 /* QR BOX */
 
 .qr-box{
-background:rgba(255,255,255,0.15);
+
 padding:25px;
-border-radius:20px;
-width:340px;
+width:350px;
+
 display:flex;
 flex-direction:column;
 align-items:center;
-backdrop-filter:blur(10px);
+
 }
 
 /* QR */
 
 #qr{
+
 margin:20px 0;
 display:flex;
 justify-content:center;
+
 }
 
 #qr img{
-width:200px;
-border-radius:10px;
+
+width:220px;
+border-radius:14px;
+
 }
 
-/* TOP BUTTONS */
-
-.back-btn,.theme-btn{
-position:fixed;
-left:15px;
-background:black;
-color:white;
-padding:8px 15px;
-border-radius:20px;
-cursor:pointer;
-font-size:13px;
-z-index:100;
-}
+/* BACK BUTTON */
 
 .back-btn{
+
+position:fixed;
+
 top:15px;
-}
+left:15px;
 
-.theme-btn{
-top:60px;
-}
+background:black;
+color:white;
 
-/* TEMPLATE */
+padding:8px 15px;
 
-.template-bar{
-margin-top:15px;
-display:none;
-flex-wrap:wrap;
-gap:10px;
-justify-content:center;
-max-height:200px;
-overflow-y:auto;
-}
+border-radius:20px;
 
-.template-bar img{
-width:65px;
-height:65px;
-object-fit:cover;
-border-radius:10px;
 cursor:pointer;
-border:2px solid white;
-transition:0.2s;
-}
 
-.template-bar img:hover{
-transform:scale(1.1);
-border-color:yellow;
+font-size:13px;
+
+z-index:100;
+
 }
 
 /* HISTORY */
 
 #list{
+
 margin-top:20px;
 width:350px;
+
 }
 
 .item{
-background:white;
-color:black;
+
+background:
+rgba(255,255,255,0.08);
+
 padding:12px;
 margin:10px 0;
-border-radius:10px;
+
+border-radius:12px;
+
 word-break:break-word;
+
 display:flex;
 justify-content:space-between;
 align-items:center;
+
 }
+
+/* DELETE */
 
 .delete-btn{
+
 background:red;
 color:white;
+
 border:none;
+
 padding:5px 10px;
+
 border-radius:6px;
+
 cursor:pointer;
 width:auto;
+
 }
 
-/* PASSWORD ICON */
+/* PASSWORD */
 
 .eye{
+
 position:absolute;
+
 right:15px;
 top:50%;
+
 transform:translateY(-50%);
+
 cursor:pointer;
+
+}
+
+/* POPUP */
+
+#popup{
+
+position:fixed;
+
+top:25px;
+right:25px;
+
+background:#00f7ff;
 color:black;
+
+padding:15px 25px;
+
+border-radius:12px;
+
+font-weight:bold;
+
+box-shadow:
+0 0 20px rgba(0,247,255,0.7);
+
+opacity:0;
+pointer-events:none;
+
+transform:translateY(-20px);
+
+transition:0.4s;
+
+z-index:999;
+
 }
 
 </style>
@@ -253,28 +460,60 @@ color:black;
 
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
 
 <div id="login" class="page">
+
+<h1 class="logo">
+<span>⚡</span> QR GENERATOR X
+</h1>
 
 <div class="box">
 
 <h2 id="title">Login</h2>
 
-<input id="email" type="email" placeholder="Email">
+<input
+id="email"
+type="text"
+placeholder="Username">
 
 <div style="position:relative;width:100%">
 
-<input id="pass" type="password" placeholder="Password" style="padding-right:45px">
+<input
+id="pass"
+type="password"
+placeholder="Password"
+style="padding-right:45px">
 
-<span class="eye" onclick="togglePassword()">👁</span>
+<span
+class="eye"
+onclick="togglePassword()">
+👁
+</span>
 
 </div>
 
-<button onclick="auth()">Login</button>
+<button onclick="auth()">
+Login
+</button>
 
-<p onclick="toggleMode()" style="margin-top:15px;cursor:pointer">
+<p
+onclick="forgotPassword()"
+style="
+margin-top:10px;
+cursor:pointer;
+font-size:14px">
+Forgot Password?
+</p>
+
+<p
+onclick="toggleMode()"
+style="
+margin-top:15px;
+cursor:pointer">
+
 Create Account
+
 </p>
 
 </div>
@@ -285,16 +524,26 @@ Create Account
 
 <div id="dashboard" class="page">
 
-<h1>QR Master Pro</h1>
+<h1 class="logo">
+<span>⚡</span> QR GENERATOR X
+</h1>
 
 <div class="card-container">
 
-<div class="card" onclick="showPage('generator')">
+<div
+class="card"
+onclick="showPage('generator')">
+
 Generate QR
+
 </div>
 
-<div class="card" onclick="showPage('history')">
+<div
+class="card"
+onclick="showPage('history')">
+
 History
+
 </div>
 
 </div>
@@ -305,12 +554,12 @@ History
 
 <div id="generator" class="page">
 
-<div class="back-btn" onclick="showPage('dashboard')">
-← Back
-</div>
+<div
+class="back-btn"
+onclick="showPage('dashboard')">
 
-<div class="theme-btn" onclick="toggleTheme()">
-🌙 Theme
+← Back
+
 </div>
 
 <div class="qr-box">
@@ -319,33 +568,25 @@ History
 
 <select id="type">
 
-<option value="text">Text</option>
-<option value="link">Website</option>
-<option value="whatsapp">WhatsApp</option>
-<option value="call">Call</option>
+<option value="text">🖼 Image</option>
+
+<option value="link">🌐 Website</option>
+
+<option value="whatsapp">💬 WhatsApp</option>
+
+<option value="call">📞 Call</option>
 
 </select>
 
-<input id="text" placeholder="Enter data">
+<input
+id="text"
+placeholder="Enter Data">
 
-<button onclick="gen()">Generate QR</button>
-
-<div id="qr"></div>
-
-<button onclick="toggleTemplates()">
-Templates 🎨
+<button onclick="gen()">
+Generate QR
 </button>
 
-<div id="templates" class="template-bar">
-
-<img src="t1.png" onclick="applyTemplate('t1')">
-<img src="t2.png" onclick="applyTemplate('t2')">
-<img src="t3.png" onclick="applyTemplate('t3')">
-<img src="t4.png" onclick="applyTemplate('t4')">
-<img src="t5.png" onclick="applyTemplate('t5')">
-<img src="t6.png" onclick="applyTemplate('t6')">
-
-</div>
+<div id="qr"></div>
 
 <button onclick="downloadQR()">
 Download QR
@@ -359,8 +600,12 @@ Download QR
 
 <div id="history" class="page">
 
-<div class="back-btn" onclick="showPage('dashboard')">
+<div
+class="back-btn"
+onclick="showPage('dashboard')">
+
 ← Back
+
 </div>
 
 <h2>QR History</h2>
@@ -369,23 +614,30 @@ Download QR
 
 </div>
 
+<!-- POPUP -->
+
+<div id="popup"></div>
+
 <script>
 
 /* VARIABLES */
 
 let isLogin=true
 let lastData=""
-let currentTemplate=""
 
 /* PAGE */
 
 function showPage(id){
 
-document.querySelectorAll(".page").forEach(p=>{
+document.querySelectorAll(".page")
+.forEach(p=>{
+
 p.style.display="none"
+
 })
 
-document.getElementById(id).style.display="flex"
+document.getElementById(id)
+.style.display="flex"
 
 if(id==="history"){
 loadHistory()
@@ -394,39 +646,67 @@ loadHistory()
 }
 
 window.onload=()=>{
+
 showPage("login")
+
 }
 
-/* THEME */
+/* POPUP */
 
-function toggleTheme(){
-document.body.classList.toggle("dark")
+function showPopup(msg){
+
+let popup=
+document.getElementById("popup")
+
+popup.innerText=msg
+
+popup.style.opacity="1"
+popup.style.transform="translateY(0)"
+
+setTimeout(()=>{
+
+popup.style.opacity="0"
+
+popup.style.transform=
+"translateY(-20px)"
+
+},2500)
+
 }
 
 /* PASSWORD */
 
 function togglePassword(){
 
-let pass=document.getElementById("pass")
+let pass=
+document.getElementById("pass")
 
 if(pass.type==="password"){
+
 pass.type="text"
+
 }else{
+
 pass.type="password"
-}
 
 }
 
-/* LOGIN MODE */
+}
+
+/* LOGIN / REGISTER */
 
 function toggleMode(){
 
 isLogin=!isLogin
 
-document.getElementById("title").innerText=
+document.getElementById("title")
+.innerText=
+
 isLogin?"Login":"Register"
 
-document.querySelector("button").innerText=
+document.querySelector(".box button")
+.innerText=
+
 isLogin?"Login":"Register"
 
 }
@@ -435,39 +715,50 @@ isLogin?"Login":"Register"
 
 function auth(){
 
-let email=document.getElementById("email").value.trim()
-let pass=document.getElementById("pass").value.trim()
+let email=
+document.getElementById("email")
+.value.trim()
+
+let pass=
+document.getElementById("pass")
+.value.trim()
 
 if(email===""){
-return alert("Enter email")
+return showPopup("Enter Username ❌")
 }
 
 if(pass===""){
-return alert("Enter password")
-}
-
-if(!email.includes("@") || !email.includes(".")){
-return alert("Enter valid email")
+return showPopup("Enter Password ❌")
 }
 
 if(pass.length<4){
-return alert("Password minimum 4 characters")
+return showPopup("Password too short ❌")
 }
 
-let users=JSON.parse(localStorage.getItem("users") || "{}")
+let users=
+JSON.parse(
+localStorage.getItem("users") || "{}"
+)
 
 /* LOGIN */
 
 if(isLogin){
 
-if(users[email] && users[email]===pass){
+if(users[email] &&
+users[email]===pass){
 
-alert("Login Successful")
+localStorage.setItem(
+"currentUser",
+email
+)
+
+showPopup("Login Successful 🚀")
+
 showPage("dashboard")
 
 }else{
 
-alert("Wrong Email or Password")
+showPopup("Wrong Username or Password ❌")
 
 }
 
@@ -478,14 +769,21 @@ alert("Wrong Email or Password")
 else{
 
 if(users[email]){
-return alert("Account already exists")
+
+return showPopup(
+"Account already exists ❌"
+)
+
 }
 
 users[email]=pass
 
-localStorage.setItem("users",JSON.stringify(users))
+localStorage.setItem(
+"users",
+JSON.stringify(users)
+)
 
-alert("Registration Successful")
+showPopup("Account Created 🎉")
 
 toggleMode()
 
@@ -495,7 +793,9 @@ toggleMode()
 
 /* ENTER KEY */
 
-document.addEventListener("keypress",function(e){
+document.addEventListener(
+"keypress",
+function(e){
 
 if(e.key==="Enter"){
 auth()
@@ -503,35 +803,132 @@ auth()
 
 })
 
-/* QR GENERATE */
+/* FORGOT PASSWORD */
+
+function forgotPassword(){
+
+let username=
+prompt("Enter Username")
+
+if(!username){
+return
+}
+
+let users=
+JSON.parse(
+localStorage.getItem("users") || "{}"
+)
+
+if(users[username]){
+
+showPopup(
+"Password: " + users[username]
+)
+
+}else{
+
+showPopup("User not found ❌")
+
+}
+
+}
+
+/* PLACEHOLDER */
+
+document.getElementById("type")
+.addEventListener("change",function(){
+
+let type=this.value
+
+let input=
+document.getElementById("text")
+
+if(type==="whatsapp"){
+
+input.placeholder=
+"Enter Mobile Number"
+
+}
+
+else if(type==="link"){
+
+input.placeholder=
+"Enter Website URL"
+
+}
+
+else if(type==="call"){
+
+input.placeholder=
+"Enter Phone Number"
+
+}
+
+else{
+
+input.placeholder=
+"Enter Image/Text Data"
+
+}
+
+})
+
+/* GENERATE */
 
 function gen(){
 
-let text=document.getElementById("text").value.trim()
-let type=document.getElementById("type").value
+let text=
+document.getElementById("text")
+.value.trim()
+
+let type=
+document.getElementById("type")
+.value
 
 if(text===""){
-return alert("Enter data")
+return showPopup("Enter Data ❌")
 }
 
-if(type==="link" && !text.startsWith("http")){
+/* WEBSITE */
+
+if(type==="link" &&
+!text.startsWith("http")){
+
 text="https://"+text
+
 }
+
+/* WHATSAPP */
 
 if(type==="whatsapp"){
+
 text="https://wa.me/91"+text
+
 }
 
+/* CALL */
+
 if(type==="call"){
+
 text="tel:"+text
+
 }
 
 lastData=text
 
 /* SAVE HISTORY */
 
+let currentUser=
+localStorage.getItem("currentUser")
+
 let history=
-JSON.parse(localStorage.getItem("history") || "[]")
+JSON.parse(
+
+localStorage.getItem(
+"history_"+currentUser
+) || "[]"
+
+)
 
 history.unshift(text)
 
@@ -539,69 +936,28 @@ if(history.length>20){
 history.pop()
 }
 
-localStorage.setItem("history",JSON.stringify(history))
+localStorage.setItem(
+
+"history_"+currentUser,
+
+JSON.stringify(history)
+
+)
+
+/* QR */
 
 let url=
+
 `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+
+
 encodeURIComponent(lastData)
 
-document.getElementById("qr").innerHTML=
+document.getElementById("qr")
+.innerHTML=
+
 `<img src="${url}">`
 
-}
-
-/* TEMPLATE */
-
-function toggleTemplates(){
-
-let t=document.getElementById("templates")
-
-t.style.display=
-t.style.display==="flex"?"none":"flex"
-
-}
-
-function applyTemplate(t){
-
-currentTemplate=t
-
-let url=
-`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+
-encodeURIComponent(lastData)
-
-let style=""
-
-if(t==="t1")
-style="background:#d1fae5;padding:10px;border-radius:20px"
-
-if(t==="t2")
-style="background:#111;padding:10px;border-radius:20px;color:white"
-
-if(t==="t3")
-style="background:#fca5a5;padding:10px;border-radius:20px"
-
-if(t==="t4")
-style="background:#fde68a;padding:10px;border-radius:20px"
-
-if(t==="t5")
-style="background:#67e8f9;padding:15px;border-radius:50%"
-
-if(t==="t6")
-style="background:#000;padding:10px;border-radius:20px;color:white"
-
-document.getElementById("qr").innerHTML=`
-
-<div style="text-align:center;${style}">
-
-<img src="${url}">
-
-<div style="margin-top:8px;font-weight:bold">
-SCAN ME
-</div>
-
-</div>
-
-`
+showPopup("QR Generated ⚡")
 
 }
 
@@ -610,37 +966,26 @@ SCAN ME
 function downloadQR(){
 
 if(!lastData){
-return alert("Generate QR first")
+
+return showPopup(
+"Generate QR first ❌"
+)
+
 }
-
-let img=new Image()
-
-img.crossOrigin="anonymous"
-
-img.src=
-`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+
-encodeURIComponent(lastData)
-
-img.onload=function(){
-
-let canvas=document.createElement("canvas")
-
-canvas.width=300
-canvas.height=300
-
-let ctx=canvas.getContext("2d")
-
-ctx.drawImage(img,0,0)
 
 let a=document.createElement("a")
 
-a.download="qr.png"
+a.href=
 
-a.href=canvas.toDataURL()
+`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=`+
+
+encodeURIComponent(lastData)
+
+a.download="qr.png"
 
 a.click()
 
-}
+showPopup("QR Downloaded 🎉")
 
 }
 
@@ -648,19 +993,33 @@ a.click()
 
 function loadHistory(){
 
-let history=
-JSON.parse(localStorage.getItem("history") || "[]")
+let currentUser=
+localStorage.getItem("currentUser")
 
-document.getElementById("list").innerHTML=
+let history=
+JSON.parse(
+
+localStorage.getItem(
+"history_"+currentUser
+) || "[]"
+
+)
+
+document.getElementById("list")
+.innerHTML=
+
 history.map((item,index)=>`
 
 <div class="item">
 
 <span>${item}</span>
 
-<button class="delete-btn"
+<button
+class="delete-btn"
 onclick="deleteHistory(${index})">
+
 Delete
+
 </button>
 
 </div>
@@ -669,18 +1028,35 @@ Delete
 
 }
 
-/* DELETE HISTORY */
+/* DELETE */
 
 function deleteHistory(index){
 
+let currentUser=
+localStorage.getItem("currentUser")
+
 let history=
-JSON.parse(localStorage.getItem("history") || "[]")
+JSON.parse(
+
+localStorage.getItem(
+"history_"+currentUser
+) || "[]"
+
+)
 
 history.splice(index,1)
 
-localStorage.setItem("history",JSON.stringify(history))
+localStorage.setItem(
+
+"history_"+currentUser,
+
+JSON.stringify(history)
+
+)
 
 loadHistory()
+
+showPopup("History Deleted 🗑")
 
 }
 
